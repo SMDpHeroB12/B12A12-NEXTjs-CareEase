@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
+import { auth } from "@/firebase/firebase.config";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import Link from "next/link";
@@ -40,6 +41,20 @@ const Register = () => {
 
     try {
       await createUser(email, password);
+      // MongoDB save
+      await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: auth.currentUser.uid,
+          name,
+          email,
+          contact,
+          nid,
+        }),
+      });
 
       Swal.fire({
         icon: "success",
@@ -62,6 +77,21 @@ const Register = () => {
   const handleGoogleRegister = async () => {
     try {
       await googleLogin();
+
+      await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: result.user.uid,
+          name: result.user.displayName,
+          email: result.user.email,
+          contact: "",
+          nid: "",
+        }),
+      });
+
       Swal.fire({
         icon: "success",
         title: "Registration and Login Successful",

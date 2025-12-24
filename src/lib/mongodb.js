@@ -1,31 +1,16 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
+import { MongoClient } from "mongodb";
 
 const uri = process.env.MONGODB_URI;
-const dbName = process.env.DBNAME;
-
-if (!uri) {
-  throw new Error("MONGODB_URI not found in .env.local");
-}
+const options = {};
 
 let client;
-let db;
+let clientPromise;
 
-const connectDB = async () => {
-  if (db) return db;
+if (!process.env.MONGODB_URI) {
+  throw new Error("Please add MONGODB_URI to .env.local");
+}
 
-  client = new MongoClient(uri, {
-    serverApi: {
-      version: ServerApiVersion.v1,
-      strict: true,
-      deprecationErrors: true,
-    },
-  });
+client = new MongoClient(uri, options);
+clientPromise = client.connect();
 
-  await client.connect();
-  db = client.db(dbName);
-
-  console.log("MongoDB Connected");
-  return db;
-};
-
-module.exports = connectDB;
+export default clientPromise;

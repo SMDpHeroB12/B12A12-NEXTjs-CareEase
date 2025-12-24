@@ -50,12 +50,6 @@ const Navbar = () => {
               </li>
 
               {user && (
-                <Link href="/admin" className={linkClass("/admin")}>
-                  Admin
-                </Link>
-              )}
-
-              {user && (
                 <>
                   <li>
                     <Link
@@ -71,6 +65,9 @@ const Navbar = () => {
                       className={pathname === "/profile" ? "active" : ""}
                     >
                       My Profile
+                    </Link>
+                    <Link href="/admin" className={linkClass("/admin")}>
+                      Admin
                     </Link>
                   </li>
                   <li>
@@ -114,11 +111,6 @@ const Navbar = () => {
           </Link>
 
           {/* Admin  */}
-          {user && (
-            <Link href="/admin" className={linkClass("/admin")}>
-              Admin
-            </Link>
-          )}
 
           {user && (
             <>
@@ -128,6 +120,9 @@ const Navbar = () => {
 
               <Link href="/profile" className={linkClass("/profile")}>
                 My Profile
+              </Link>
+              <Link href="/admin" className={linkClass("/admin")}>
+                Admin
               </Link>
 
               <button onClick={logout} className="btn btn-sm btn-error">

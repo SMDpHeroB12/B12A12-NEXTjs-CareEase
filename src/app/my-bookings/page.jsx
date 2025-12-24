@@ -37,7 +37,12 @@ const MyBookings = () => {
   };
 
   if (loading) {
-    return <p className="text-center mt-10">Loading...</p>;
+    return (
+      <div className="flex flex-col gap-5">
+        <p className="text-center mt-10">Loading...</p>;
+        <span className="loading loading-spinner text-accent"></span>
+      </div>
+    );
   }
 
   if (bookings.length === 0) {

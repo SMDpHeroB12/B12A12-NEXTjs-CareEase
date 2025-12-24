@@ -12,6 +12,18 @@ const AdminDashboard = () => {
       .then((data) => setBookings(data));
   };
 
+  const updateStatus = (id, status) => {
+    fetch("/api/admin/update-booking", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, status }),
+    }).then(() => {
+      loadBookings();
+    });
+  };
+
   useEffect(() => {
     loadBookings();
   }, []);
@@ -31,6 +43,7 @@ const AdminDashboard = () => {
                 <th>Location</th>
                 <th>Cost</th>
                 <th>Status</th>
+                <th>Action</th>
               </tr>
             </thead>
 
@@ -43,7 +56,35 @@ const AdminDashboard = () => {
                   <td>{b.location}</td>
                   <td>৳{b.totalCost}</td>
                   <td>
-                    <span className="badge badge-info">{b.status}</span>
+                    <span className="badge badge-info block">{b.status}</span>
+                  </td>
+                  <td className="flex gap-3 w-full">
+                    {b.status === "pending" && (
+                      <button
+                        onClick={() => updateStatus(b._id, "confirmed")}
+                        className="btn btn-sm btn-success "
+                      >
+                        Confirm
+                      </button>
+                    )}
+
+                    {b.status === "confirmed" && (
+                      <button
+                        onClick={() => updateStatus(b._id, "completed")}
+                        className="btn btn-sm btn-primary "
+                      >
+                        Complete
+                      </button>
+                    )}
+
+                    {b.status !== "cancelled" && b.status !== "completed" && (
+                      <button
+                        onClick={() => updateStatus(b._id, "cancelled")}
+                        className="btn btn-sm btn-error "
+                      >
+                        Cancel
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
